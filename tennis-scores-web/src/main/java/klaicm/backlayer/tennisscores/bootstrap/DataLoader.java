@@ -59,11 +59,12 @@ public class DataLoader implements CommandLineRunner {
         match2.setPlayerW(playerService.findById((long) 3).getFirstName() + " " + playerService.findById((long) 3).getLastName());
         match2.setPlayerL(playerService.findById((long) 1).getFirstName() + " " + playerService.findById((long) 1).getLastName());
         match2.setResult("6:1 6:2");
-        match1.setDate(LocalDate.of(2019,8,25));
+        match2.setDate(LocalDate.of(2019,8,25));
 
         matchService.save(match2);
 
         System.out.println(matchService.findAll().iterator().next().getPlayerW().equalsIgnoreCase("Marko Marić"));
+        System.out.println(matchService.findAll().iterator().next().getPlayerL());
 
     }
 }
