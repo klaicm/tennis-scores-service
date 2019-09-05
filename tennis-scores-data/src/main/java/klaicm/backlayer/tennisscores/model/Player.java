@@ -1,5 +1,9 @@
 package klaicm.backlayer.tennisscores.model;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
 public class Player extends BaseEntity {
 
     private String firstName;
@@ -7,7 +11,15 @@ public class Player extends BaseEntity {
     private Integer points;
     private Integer wins;
     private Integer loses;
-    private Integer seasonId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+    private Set<Match> matches;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+    private Set<Season> seasons;
+
+    @Lob
+    private Byte[] image;
 
     public String getFirstName() {
         return firstName;
@@ -49,11 +61,27 @@ public class Player extends BaseEntity {
         this.loses = loses;
     }
 
-    public Integer getSeasonId() {
-        return seasonId;
+    public Set<Match> getMatches() {
+        return matches;
     }
 
-    public void setSeasonId(Integer seasonId) {
-        this.seasonId = seasonId;
+    public void setMatches(Set<Match> matches) {
+        this.matches = matches;
+    }
+
+    public Set<Season> getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(Set<Season> seasons) {
+        this.seasons = seasons;
+    }
+
+    public Byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(Byte[] image) {
+        this.image = image;
     }
 }

@@ -41,10 +41,6 @@ public class PlayerController {
     public String getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
         String name = playerService.findById(id).getFirstName() + " " + playerService.findById(id).getLastName();
         List<Match> matchList = new ArrayList<>();
-        if (matchService.findAll().iterator().next().getPlayerW().equalsIgnoreCase(playerService.findById(id).getFirstName() + " " + playerService.findById(id).getLastName())) {
-            matchList.add(matchService.findById((long) 2));
-            model.addAttribute("playerMatches", matchList);
-        }
 
         return "playerMatches/index";
     }

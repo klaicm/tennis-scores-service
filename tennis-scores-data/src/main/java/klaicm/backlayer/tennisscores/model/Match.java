@@ -1,27 +1,41 @@
 package klaicm.backlayer.tennisscores.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class Match extends BaseEntity {
 
-    private String playerW;
-    private String playerL;
+    @ManyToOne
+    private Player player;
+
+    private Long playerW;
+    private Long playerL;
+
     private String result;
     private LocalDate date;
 
-    public String getPlayerW() {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Long getPlayerW() {
         return playerW;
     }
 
-    public void setPlayerW(String playerW) {
+    public void setPlayerW(Long playerW) {
         this.playerW = playerW;
     }
 
-    public String getPlayerL() {
+    public Long getPlayerL() {
         return playerL;
     }
 
-    public void setPlayerL(String playerL) {
+    public void setPlayerL(Long playerL) {
         this.playerL = playerL;
     }
 
@@ -40,4 +54,5 @@ public class Match extends BaseEntity {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
 }

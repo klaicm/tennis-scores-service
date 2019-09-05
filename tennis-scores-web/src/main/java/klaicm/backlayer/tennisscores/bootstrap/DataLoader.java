@@ -48,23 +48,20 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Loaded Players...");
 
         Match match1 = new Match();
-        match1.setPlayerW(playerService.findById((long) 2).getFirstName() + " " + playerService.findById((long) 2).getLastName());
-        match1.setPlayerL(playerService.findById((long) 3).getFirstName() + " " + playerService.findById((long) 3).getLastName());
+//        match1.setPlayerW((long) 1);
+//        match1.setPlayerL((long) 2);
         match1.setResult("6:3 6:3");
         match1.setDate(LocalDate.of(2019,8,25));
 
         matchService.save(match1);
 
         Match match2 = new Match();
-        match2.setPlayerW(playerService.findById((long) 3).getFirstName() + " " + playerService.findById((long) 3).getLastName());
-        match2.setPlayerL(playerService.findById((long) 1).getFirstName() + " " + playerService.findById((long) 1).getLastName());
+//        match2.setPlayerW((long) 2);
+//        match2.setPlayerL((long) 3);
         match2.setResult("6:1 6:2");
         match2.setDate(LocalDate.of(2019,8,25));
 
         matchService.save(match2);
-
-        System.out.println(matchService.findAll().iterator().next().getPlayerW().equalsIgnoreCase("Marko Marić"));
-        System.out.println(matchService.findAll().iterator().next().getPlayerL());
 
     }
 }
