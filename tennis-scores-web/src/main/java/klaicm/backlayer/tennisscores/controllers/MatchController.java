@@ -1,25 +1,23 @@
 package klaicm.backlayer.tennisscores.controllers;
 
+import klaicm.backlayer.tennisscores.model.Match;
 import klaicm.backlayer.tennisscores.services.MatchService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.Set;
 
-@Controller
-@RequestMapping("/matches")
+@RestController
 public class MatchController {
 
-    private final MatchService matchService;
+    @Autowired
+    MatchService matchService;
 
-    public MatchController(MatchService matchService) {
-        this.matchService = matchService;
-    }
-
-    @RequestMapping("")
-    public String getAllMatches(Model model) {
-        model.addAttribute("matches", matchService.findAll());
-
-        return "matches/index";
+    @GetMapping("/matches")
+    private Set<Match> getAllMatches() {
+        System.out.println(matchService.test());
+        System.out.println(matchService.findAll().size());
+        return matchService.findAll();
     }
 
 }
