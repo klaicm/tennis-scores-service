@@ -1,46 +1,51 @@
 package klaicm.backlayer.tennisscores.controllers;
 
 import klaicm.backlayer.tennisscores.model.Match;
+import klaicm.backlayer.tennisscores.model.Player;
+import klaicm.backlayer.tennisscores.repositories.MatchRepository;
+import klaicm.backlayer.tennisscores.repositories.PlayerRepository;
 import klaicm.backlayer.tennisscores.services.MatchService;
 import klaicm.backlayer.tennisscores.services.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
-@RequestMapping("/players")
+@RequestMapping("/player")
 public class PlayerController {
 
-    private final PlayerService playerService;
-    private final MatchService matchService;
+    @Autowired
+    PlayerRepository playerRepository;
 
-    public PlayerController(PlayerService playerService, MatchService matchService) {
-        this.playerService = playerService;
-        this.matchService = matchService;
-    }
+    @Autowired
+    MatchRepository matchRepository;
 
-    @RequestMapping("/table")
-    public String listPlayers(Model model) {
-        model.addAttribute("players", playerService.findAll());
-        return "players/index";
-    }
-
-    @RequestMapping("player/{id}")
+    @RequestMapping("{id}")
     public String getPlayer(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("player", playerService.findById(id));
-        System.out.println(matchService.findAll().contains(playerService.findById(id)));
+        model.addAttribute("player", playerRepository.findById((long) 1));
         return "player/index";
     }
 
     @RequestMapping("matches/{id}")
     public String getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
-        String name = playerService.findById(id).getFirstName() + " " + playerService.findById(id).getLastName();
-        List<Match> matchList = new ArrayList<>();
+        Set<Match> playerMatches = new HashSet<>();
+        Optional<Player> player = playerRepository.findById((long) 2);
+        String name = playerRepository.findById(id).get().getFirstName() + " " + playerRepository.findById(id).get().getLastName();
+
+        matchRepository.findAll().forEach(match -> {
+            if (match.getPlayerW() == 1) {
+                playerMatches.add(match);
+            }
+
+        });
+
+        if (playerMatches.size() > 0) {
+            model.addAttribute("playerMatches", playerMatches);
+        }
 
         return "playerMatches/index";
     }
