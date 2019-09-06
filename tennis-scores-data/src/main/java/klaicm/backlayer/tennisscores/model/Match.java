@@ -2,12 +2,13 @@ package klaicm.backlayer.tennisscores.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 public class Match extends BaseEntity {
 
-    @ManyToOne
-    private Player player;
+    @ManyToMany(mappedBy = "matches")
+    private Set<Player> players;
 
     private Long playerW;
     private Long playerL;
@@ -15,12 +16,12 @@ public class Match extends BaseEntity {
     private String result;
     private LocalDate date;
 
-    public Player getPlayer() {
-        return player;
+    public Set<Player> getPlayer() {
+        return players;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayer(Set<Player> player) {
+        this.players = player;
     }
 
     public Long getPlayerW() {
