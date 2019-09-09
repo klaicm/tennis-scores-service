@@ -8,7 +8,4 @@ import java.util.Set;
 
 @Repository
 public interface PlayerRepository extends CrudRepository<Player, Long> {
-
-    @Override
-    Set<Player> findAll();
 }

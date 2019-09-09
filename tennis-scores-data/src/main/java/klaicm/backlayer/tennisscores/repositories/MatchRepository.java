@@ -8,8 +8,4 @@ import java.util.Set;
 
 @Repository
 public interface MatchRepository extends CrudRepository<Match, Long> {
-
-    @Override
-    Set<Match> findAll();
-
 }
