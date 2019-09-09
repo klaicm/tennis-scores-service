@@ -12,9 +12,7 @@ public class Player extends BaseEntity {
     private Integer wins;
     private Integer loses;
 
-    @ManyToMany
-    @JoinTable(name = "player_match",
-        joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "match_id"))
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Match> matches;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")

@@ -20,8 +20,8 @@
     <tbody>
     <tr th:each="playerMatch : ${playerMatches}">
         <td th:text="${playerMatch.id}">1</td>
-        <td th:text="${playerMatch.playerW}" style="background-color: greenyellow">Joe</td>
-        <td th:text="${playerMatch.playerL}">Buck</td>
+        <td th:text="${playerMatch.playerW.getFirstName() + ' ' + playerMatch.playerW.getLastName()}" style="background-color: greenyellow">Joe</td>
+        <td th:text="${playerMatch.playerL.getFirstName() + ' ' + playerMatch.playerL.getLastName()}">Buck</td>
         <td th:text="${playerMatch.result}">Buck</td>
         <td th:text="${playerMatch.date}">Buck</td>
     </tr>

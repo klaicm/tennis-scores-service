@@ -7,36 +7,28 @@ import java.util.Set;
 @Entity
 public class Match extends BaseEntity {
 
-    @ManyToMany(mappedBy = "matches")
-    private Set<Player> players;
+    @ManyToOne
+    private Player playerW;
 
-    private Long playerW;
-    private Long playerL;
+    @ManyToOne
+    private Player playerL;
 
     private String result;
     private LocalDate date;
 
-    public Set<Player> getPlayer() {
-        return players;
-    }
-
-    public void setPlayer(Set<Player> player) {
-        this.players = player;
-    }
-
-    public Long getPlayerW() {
+    public Player getPlayerW() {
         return playerW;
     }
 
-    public void setPlayerW(Long playerW) {
+    public void setPlayerW(Player playerW) {
         this.playerW = playerW;
     }
 
-    public Long getPlayerL() {
+    public Player getPlayerL() {
         return playerL;
     }
 
-    public void setPlayerL(Long playerL) {
+    public void setPlayerL(Player playerL) {
         this.playerL = playerL;
     }
 

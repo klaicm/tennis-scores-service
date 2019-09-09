@@ -6,6 +6,8 @@ import klaicm.backlayer.tennisscores.repositories.MatchRepository;
 import klaicm.backlayer.tennisscores.repositories.PlayerRepository;
 import klaicm.backlayer.tennisscores.services.MatchService;
 import klaicm.backlayer.tennisscores.services.PlayerService;
+import klaicm.backlayer.tennisscores.services.jpadata.MatchJpaService;
+import klaicm.backlayer.tennisscores.services.jpadata.PlayerJpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,25 +21,24 @@ import java.util.*;
 public class PlayerController {
 
     @Autowired
-    PlayerRepository playerRepository;
+    PlayerJpaService playerJpaService;
 
     @Autowired
-    MatchRepository matchRepository;
+    MatchJpaService matchJpaService;
 
     @RequestMapping("{id}")
     public String getPlayer(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("player", playerRepository.findById((long) 1));
+        model.addAttribute("player", playerJpaService.findById((long) 1));
         return "player/index";
     }
 
     @RequestMapping("matches/{id}")
     public String getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
         Set<Match> playerMatches = new HashSet<>();
-        Optional<Player> player = playerRepository.findById((long) 2);
-        String name = playerRepository.findById(id).get().getFirstName() + " " + playerRepository.findById(id).get().getLastName();
+        String name = playerJpaService.findById(id).getFirstName() + " " + playerJpaService.findById(id).getLastName();
 
-        matchRepository.findAll().forEach(match -> {
-            if (match.getPlayerW() == 1) {
+        matchJpaService.findAll().forEach(match -> {
+            if (match.getPlayerW().getId() == id || match.getPlayerL().getId() == id) {
                 playerMatches.add(match);
             }
 

@@ -13,20 +13,6 @@ import java.time.LocalDate;
 @Component
 public class DataLoader {
 
-    private final PlayerService playerService;
-    private final MatchService matchService;
-    private final SeasonService seasonService;
-
-    public DataLoader(PlayerService playerService, MatchService matchService, SeasonService seasonService) {
-        this.playerService = playerService;
-        this.matchService = matchService;
-        this.seasonService = seasonService;
-    }
-
-
-
-
-
 //    @Override
 //    public void run(String... args) throws Exception {
 //
