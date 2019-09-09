@@ -2,12 +2,14 @@ package klaicm.backlayer.tennisscores.services.map;
 
 import klaicm.backlayer.tennisscores.model.Player;
 import klaicm.backlayer.tennisscores.services.PlayerService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
-public class PlayerServiceMap extends AbstractMapService<Player, Long> implements PlayerService {
+@Profile("mapservice")
+public class PlayerMapService extends AbstractMapService<Player, Long> implements PlayerService {
 
     @Override
     public Set<Player> findAll() {
@@ -34,8 +36,4 @@ public class PlayerServiceMap extends AbstractMapService<Player, Long> implement
         super.deleteById(id);
     }
 
-    @Override
-    public Player findByLastName(String lastName) {
-        return null;
-    }
 }
