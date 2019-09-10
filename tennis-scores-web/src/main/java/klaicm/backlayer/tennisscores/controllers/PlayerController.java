@@ -27,9 +27,10 @@ public class PlayerController {
     MatchJpaService matchJpaService;
 
     @RequestMapping("{id}")
-    public String getPlayer(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("player", playerJpaService.findById((long) 1));
-        return "player/index";
+    public Player getPlayer(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("player", playerJpaService.findById(id));
+        return playerJpaService.findById(id);
+        // return "player/index";
     }
 
     @RequestMapping("matches/{id}")
