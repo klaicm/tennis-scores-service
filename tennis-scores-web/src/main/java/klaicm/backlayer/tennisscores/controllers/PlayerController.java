@@ -11,13 +11,12 @@ import klaicm.backlayer.tennisscores.services.jpadata.PlayerJpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Controller
-@RequestMapping("/player")
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class PlayerController {
 
     @Autowired
@@ -26,15 +25,14 @@ public class PlayerController {
     @Autowired
     MatchJpaService matchJpaService;
 
-    @RequestMapping("{id}")
+    @GetMapping("/player/{id}")
     public Player getPlayer(@PathVariable("id") Long id, Model model) {
         model.addAttribute("player", playerJpaService.findById(id));
         return playerJpaService.findById(id);
-        // return "player/index";
     }
 
-    @RequestMapping("matches/{id}")
-    public String getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/player/matches/{id}")
+    public Set<Match> getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
         Set<Match> playerMatches = new HashSet<>();
         String name = playerJpaService.findById(id).getFirstName() + " " + playerJpaService.findById(id).getLastName();
 
@@ -49,7 +47,7 @@ public class PlayerController {
             model.addAttribute("playerMatches", playerMatches);
         }
 
-        return "playerMatches/index";
+        return playerMatches;
     }
 
 }
