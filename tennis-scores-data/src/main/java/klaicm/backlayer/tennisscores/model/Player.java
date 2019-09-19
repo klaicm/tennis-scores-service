@@ -11,6 +11,10 @@ public class Player extends BaseEntity {
     private Integer points;
     private Integer wins;
     private Integer loses;
+    private Integer elo;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<ArchData> archData;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Match> matches;
@@ -59,6 +63,22 @@ public class Player extends BaseEntity {
 
     public void setLoses(Integer loses) {
         this.loses = loses;
+    }
+
+    public Integer getElo() {
+        return elo;
+    }
+
+    public void setElo(Integer elo) {
+        this.elo = elo;
+    }
+
+    public Set<ArchData> getArchData() {
+        return archData;
+    }
+
+    public void setArchData(Set<ArchData> archData) {
+        this.archData = archData;
     }
 
     public Set<Match> getMatches() {
