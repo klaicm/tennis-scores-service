@@ -36,4 +36,8 @@ public class MatchMapService extends AbstractMapService<Match, Long> implements 
         super.deleteById(id);
     }
 
+    @Override
+    public Set<Match> getPlayerMatches(Long id) {
+        return null;
+    }
 }

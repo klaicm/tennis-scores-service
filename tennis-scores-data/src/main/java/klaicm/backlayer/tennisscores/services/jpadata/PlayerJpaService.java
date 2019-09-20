@@ -1,8 +1,11 @@
 package klaicm.backlayer.tennisscores.services.jpadata;
 
+import klaicm.backlayer.tennisscores.model.ArchData;
+import klaicm.backlayer.tennisscores.model.Match;
 import klaicm.backlayer.tennisscores.model.Player;
 import klaicm.backlayer.tennisscores.repositories.PlayerRepository;
 import klaicm.backlayer.tennisscores.services.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,12 @@ import java.util.Set;
 @Service
 @Profile("jpaservice")
 public class PlayerJpaService implements PlayerService {
+
+    @Autowired
+    ArchDataJpaService archDataJpaService;
+
+    @Autowired
+    MatchJpaService matchJpaService;
 
     private final PlayerRepository playerRepository;
 
@@ -28,7 +37,16 @@ public class PlayerJpaService implements PlayerService {
 
     @Override
     public Player findById(Long aLong) {
-        return playerRepository.findById(aLong).orElse(null);
+        Player player = playerRepository.findById(aLong).orElse(null);
+        Set<ArchData> archData = archDataJpaService.getArchDataByPlayerId(player.getId());
+
+        // Set<Match> playerMatches = matchJpaService.getPlayerMatches(player.getId());
+        // player.setMatches(playerMatches);
+
+        player.setArchData(archData);
+
+        return player;
+
     }
 
     @Override

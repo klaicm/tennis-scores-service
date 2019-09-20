@@ -45,4 +45,9 @@ public class ArchDataJpaService implements ArchDataService {
     public void deleteById(Long id) {
         archDataRepository.deleteById(id);
     }
+
+    @Override
+    public Set<ArchData> getArchDataByPlayerId(Long id) {
+        return archDataRepository.getArchDataByPlayerId(id);
+    }
 }

@@ -20,7 +20,7 @@
     <tbody>
     <tr th:each="match : ${matches}">
         <td th:text="${match.id}">1</td>
-        <td th:text="${match.playerW.getFirstName() + ' ' + match.playerW.getLastName()}" style="background-color: greenyellow">Joe</td>
+        <!--<td th:text="${match.playerW.getFirstName() + ' ' + match.playerW.getLastName()}" style="background-color: greenyellow">Joe</td>-->
         <td th:text="${match.playerL.getFirstName() + ' ' + match.playerL.getLastName()}">Buck</td>
         <td th:text="${match.result}">Buck</td>
         <td th:text="${match.date}">Buck</td>

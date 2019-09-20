@@ -45,4 +45,9 @@ public class MatchJpaService implements MatchService {
     public void deleteById(Long id) {
         matchRepository.deleteById(id);
     }
+
+    @Override
+    public Set<Match> getPlayerMatches(Long id) {
+        return matchRepository.getPlayerMatches(id);
+    }
 }

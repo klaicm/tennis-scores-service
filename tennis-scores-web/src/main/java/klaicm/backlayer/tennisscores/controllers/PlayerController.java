@@ -33,46 +33,19 @@ public class PlayerController {
     @GetMapping("/player/{id}")
     public Player getPlayer(@PathVariable("id") Long id, Model model) {
         model.addAttribute("player", playerJpaService.findById(id));
-        Player player = playerJpaService.findById(id);
-        Set<ArchData> archData = new HashSet<>();
-
-                //ovdje bi sada dobro dosao jedan fini select prema playerId
-        archDataJpaService.findAll().forEach(archData1 -> {
-            if (archData1.getPlayer().getId() == player.getId()) {
-                archData.add(archData1);
-            };
-        });
-
-        if (archData.size() > 0) {
-            player.setArchData(archData);
-        }
-
-        return player;
+        return playerJpaService.findById(id);
     }
 
     @GetMapping("/player/matches/{id}")
     public Set<Match> getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
-        Set<Match> playerMatches = new HashSet<>();
-        String name = playerJpaService.findById(id).getFirstName() + " " + playerJpaService.findById(id).getLastName();
-
-        matchJpaService.findAll().forEach(match -> {
-            if (match.getPlayerW().getId() == id || match.getPlayerL().getId() == id) {
-                playerMatches.add(match);
-            }
-
-        });
-
-        if (playerMatches.size() > 0) {
-            model.addAttribute("playerMatches", playerMatches);
-        }
-
-        return playerMatches;
+        model.addAttribute("playerMatches", matchJpaService.getPlayerMatches(id));
+        return matchJpaService.getPlayerMatches(id);
     }
 
     @GetMapping("/player/arch/{id}")
-    public ArchData getPlayerArchData(@PathVariable("id") Long id, Model model) {
+    public Set<ArchData> getPlayerArchData(@PathVariable("id") Long id, Model model) {
         model.addAttribute("archData", archDataJpaService.findById(id));
-        return archDataJpaService.findById(id);
+        return archDataJpaService.getArchDataByPlayerId(id);
     }
 
 }
