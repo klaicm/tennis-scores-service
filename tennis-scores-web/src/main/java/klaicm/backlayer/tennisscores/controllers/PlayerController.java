@@ -30,6 +30,11 @@ public class PlayerController {
     @Autowired
     ArchDataJpaService archDataJpaService;
 
+    @GetMapping("/allPlayers")
+    public Set<Player> getAllPlayers() {
+        return playerJpaService.findAll();
+    }
+
     @GetMapping("/player/{id}")
     public Player getPlayer(@PathVariable("id") Long id, Model model) {
         model.addAttribute("player", playerJpaService.findById(id));
