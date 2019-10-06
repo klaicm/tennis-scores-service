@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="tennis-scores-service" />
         <module name="tennis-scores-web" />
-        <module name="tennis-scores-data" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,6 +19,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="tennis-scores-data" options="-parameters" />
+      <module name="tennis-scores-service" options="-parameters" />
       <module name="tennis-scores-web" options="-parameters" />
     </option>
   </component>

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tennis-scores-data/tennis-scores-data.iml" filepath="$PROJECT_DIR$/tennis-scores-data/tennis-scores-data.iml" />
       <module fileurl="file://$PROJECT_DIR$/tennis-scores-service.iml" filepath="$PROJECT_DIR$/tennis-scores-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/tennis-scores-web/tennis-scores-web.iml" filepath="$PROJECT_DIR$/tennis-scores-web/tennis-scores-web.iml" />
     </modules>
