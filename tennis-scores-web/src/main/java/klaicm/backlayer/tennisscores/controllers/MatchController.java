@@ -22,8 +22,8 @@ public class MatchController {
         return allMatches;
     }
 
-    @PostMapping("/saveMatch")
-    public void saveMatch(Match match) {
+    @PostMapping(path = "/saveMatch", consumes = "application/json", produces = "application/json")
+    public void saveMatch(@RequestBody Match match) {
         matchJpaService.save(match);
     }
 
