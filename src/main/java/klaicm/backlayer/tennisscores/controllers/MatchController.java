@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@CrossOrigin(origins = "https://tennis-scores-service.herokuapp.com")
 public class MatchController {
 
     @Autowired
