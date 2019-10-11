@@ -13,7 +13,7 @@ public class ArchData extends BaseEntity {
     @JoinColumn(name="player_id")
     private Player player;
 
-    private Double eloRating;
+    private Integer eloRating;
     private Double winPercentage;
     private Integer position;
     private LocalDate date;
@@ -22,11 +22,11 @@ public class ArchData extends BaseEntity {
         this.player = player;
     }
 
-    public Double getEloRating() {
+    public Integer getEloRating() {
         return eloRating;
     }
 
-    public void setEloRating(Double eloRating) {
+    public void setEloRating(Integer eloRating) {
         this.eloRating = eloRating;
     }
 

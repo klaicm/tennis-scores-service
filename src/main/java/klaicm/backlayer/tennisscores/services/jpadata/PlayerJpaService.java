@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Profile("jpaservice")
 public class PlayerJpaService implements PlayerService {
+
+    private static final int K = 32;
 
     @Autowired
     ArchDataJpaService archDataJpaService;
@@ -36,8 +37,8 @@ public class PlayerJpaService implements PlayerService {
     }
 
     @Override
-    public Player findById(Long aLong) {
-        Player player = playerRepository.findById(aLong).orElse(null);
+    public Player findById(Long id) {
+        Player player = playerRepository.findById(id).orElse(null);
         Set<ArchData> archData = archDataJpaService.getArchDataByPlayerId(player.getId());
 
         // Set<Match> playerMatches = matchJpaService.getPlayerMatches(player.getId());
@@ -50,17 +51,51 @@ public class PlayerJpaService implements PlayerService {
     }
 
     @Override
-    public Player save(Player object) {
-        return playerRepository.save(object);
+    public Player save(Player player) {
+        return playerRepository.save(player);
     }
 
     @Override
-    public void delete(Player object) {
-        playerRepository.delete(object);
+    public void delete(Player player) {
+        playerRepository.delete(player);
     }
 
     @Override
     public void deleteById(Long id) {
         playerRepository.deleteById(id);
+    }
+
+    public void updatePlayerEloRating(Match match) {
+
+        Map<String, Double> probabilityMap = this.calculateProbabilityOfWin(match);
+
+        // double raUpdated = ra + K*(1 - ea);
+        // double rbUpdated = rb + K*(0 - eb);
+        int raUpdated = (int) Math.round(match.getPlayerW().getElo() + K*(1 - probabilityMap.get("ea")));
+        int rbUpdated = (int) Math.round(match.getPlayerL().getElo() + K*(0 - probabilityMap.get("eb")));
+
+        Player playerW = findById(match.getPlayerW().getId());
+        Player playerL = findById(match.getPlayerL().getId());
+
+        playerW.setElo(raUpdated);
+        playerL.setElo(rbUpdated);
+
+        this.save(playerW);
+        this.save(playerL);
+    }
+
+    public Map<String, Double> calculateProbabilityOfWin(Match match) {
+        Map<String, Double> probabilityMap = new HashMap<String, Double>();
+
+        double ra = match.getPlayerW().getElo();
+        double rb = match.getPlayerL().getElo();
+
+        double ea = 1/(1+ Math.pow(10, ((rb-ra)/400)));
+        probabilityMap.put("ea", ea);
+        double eb = 1/(1+ Math.pow(10, ((ra-rb)/400)));
+        probabilityMap.put("eb", eb);
+
+        return probabilityMap;
+
     }
 }

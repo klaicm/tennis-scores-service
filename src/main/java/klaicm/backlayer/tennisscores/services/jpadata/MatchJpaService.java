@@ -3,6 +3,7 @@ package klaicm.backlayer.tennisscores.services.jpadata;
 import klaicm.backlayer.tennisscores.model.Match;
 import klaicm.backlayer.tennisscores.repositories.MatchRepository;
 import klaicm.backlayer.tennisscores.services.MatchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import java.util.Set;
 @Service
 @Profile("jpaservice")
 public class MatchJpaService implements MatchService {
+
+    @Autowired
+    PlayerJpaService playerJpaService;
 
     private final MatchRepository matchRepository;
 
@@ -32,13 +36,16 @@ public class MatchJpaService implements MatchService {
     }
 
     @Override
-    public Match save(Match object) {
-        return matchRepository.save(object);
+    public Match save(Match match) {
+
+        playerJpaService.updatePlayerEloRating(match);
+
+        return matchRepository.save(match);
     }
 
     @Override
-    public void delete(Match object) {
-        matchRepository.delete(object);
+    public void delete(Match match) {
+        matchRepository.delete(match);
     }
 
     @Override

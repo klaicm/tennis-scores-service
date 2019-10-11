@@ -24,7 +24,4 @@ public class RestConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
-
-
 }
