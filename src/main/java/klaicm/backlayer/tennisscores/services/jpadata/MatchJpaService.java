@@ -38,7 +38,7 @@ public class MatchJpaService implements MatchService {
     @Override
     public Match save(Match match) {
 
-        playerJpaService.updatePlayerEloRating(match);
+        playerJpaService.updatePlayer(match);
 
         return matchRepository.save(match);
     }

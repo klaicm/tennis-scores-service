@@ -14,7 +14,7 @@ public class ArchData extends BaseEntity {
     private Player player;
 
     private Integer eloRating;
-    private Double winPercentage;
+    private Integer winPercentage;
     private Integer position;
     private LocalDate date;
 
@@ -30,11 +30,11 @@ public class ArchData extends BaseEntity {
         this.eloRating = eloRating;
     }
 
-    public Double getWinPercentage() {
+    public Integer getWinPercentage() {
         return winPercentage;
     }
 
-    public void setWinPercentage(Double winPercentage) {
+    public void setWinPercentage(Integer winPercentage) {
         this.winPercentage = winPercentage;
     }
 

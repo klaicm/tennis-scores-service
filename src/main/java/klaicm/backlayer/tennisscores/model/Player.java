@@ -9,8 +9,10 @@ public class Player extends BaseEntity {
     private String firstName;
     private String lastName;
     private Integer points;
-    private Integer wins;
-    private Integer loses;
+    private Integer winsInTwo;
+    private Integer winsInTb;
+    private Integer losesInTwo;
+    private Integer losesInTb;
     private Integer elo;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -49,20 +51,36 @@ public class Player extends BaseEntity {
         this.points = points;
     }
 
-    public Integer getWins() {
-        return wins;
+    public Integer getWinsInTwo() {
+        return winsInTwo;
     }
 
-    public void setWins(Integer wins) {
-        this.wins = wins;
+    public void setWinsInTwo(Integer winsInTwo) {
+        this.winsInTwo = winsInTwo;
     }
 
-    public Integer getLoses() {
-        return loses;
+    public Integer getWinsInTb() {
+        return winsInTb;
     }
 
-    public void setLoses(Integer loses) {
-        this.loses = loses;
+    public void setWinsInTb(Integer winsInTb) {
+        this.winsInTb = winsInTb;
+    }
+
+    public Integer getLosesInTwo() {
+        return losesInTwo;
+    }
+
+    public void setLosesInTwo(Integer losesInTwo) {
+        this.losesInTwo = losesInTwo;
+    }
+
+    public Integer getLosesInTb() {
+        return losesInTb;
+    }
+
+    public void setLosesInTb(Integer losesInTb) {
+        this.losesInTb = losesInTb;
     }
 
     public Integer getElo() {

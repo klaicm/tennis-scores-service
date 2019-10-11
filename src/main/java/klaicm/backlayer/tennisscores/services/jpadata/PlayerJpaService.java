@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Profile("jpaservice")
@@ -41,9 +42,6 @@ public class PlayerJpaService implements PlayerService {
         Player player = playerRepository.findById(id).orElse(null);
         Set<ArchData> archData = archDataJpaService.getArchDataByPlayerId(player.getId());
 
-        // Set<Match> playerMatches = matchJpaService.getPlayerMatches(player.getId());
-        // player.setMatches(playerMatches);
-
         player.setArchData(archData);
 
         return player;
@@ -65,30 +63,49 @@ public class PlayerJpaService implements PlayerService {
         playerRepository.deleteById(id);
     }
 
-    public void updatePlayerEloRating(Match match) {
+    public void updatePlayer(Match match) {
+
+        Player playerW = findById(match.getPlayerW().getId());
+        Player playerL = findById(match.getPlayerL().getId());
 
         Map<String, Double> probabilityMap = this.calculateProbabilityOfWin(match);
 
         // double raUpdated = ra + K*(1 - ea);
         // double rbUpdated = rb + K*(0 - eb);
-        int raUpdated = (int) Math.round(match.getPlayerW().getElo() + K*(1 - probabilityMap.get("ea")));
-        int rbUpdated = (int) Math.round(match.getPlayerL().getElo() + K*(0 - probabilityMap.get("eb")));
+        int raUpdated = (int) Math.round(playerW.getElo() + K*(1 - probabilityMap.get("ea")));
+        int rbUpdated = (int) Math.round(playerL.getElo() + K*(0 - probabilityMap.get("eb")));
 
-        Player playerW = findById(match.getPlayerW().getId());
-        Player playerL = findById(match.getPlayerL().getId());
+        if (match.getResult().length() <= 7) {
+            playerW.setWinsInTwo(playerW.getWinsInTwo() + 1);
+            playerW.setPoints(playerW.getPoints() + 3);
+            playerL.setLosesInTwo(playerL.getLosesInTwo() + 1);
+        } else if (match.getResult().length() > 7) {
+            playerW.setWinsInTb(playerW.getWinsInTb() + 1);
+            playerW.setPoints(playerW.getPoints() + 2);
+            playerL.setLosesInTb(playerL.getLosesInTb() + 1);
+            playerL.setPoints(playerL.getPoints() + 1);
+        } else {
+            throw new IllegalArgumentException("Uneseni rezultat neispravan");
+        }
 
         playerW.setElo(raUpdated);
         playerL.setElo(rbUpdated);
 
         this.save(playerW);
         this.save(playerL);
+
+        ArchData playerWArch = insertArchData(playerW, raUpdated, match);
+        ArchData playerLArch = insertArchData(playerL, rbUpdated, match);
+
+        archDataJpaService.save(playerWArch);
+        archDataJpaService.save(playerLArch);
     }
 
     public Map<String, Double> calculateProbabilityOfWin(Match match) {
         Map<String, Double> probabilityMap = new HashMap<String, Double>();
 
-        double ra = match.getPlayerW().getElo();
-        double rb = match.getPlayerL().getElo();
+        double ra = findById(match.getPlayerW().getId()).getElo();
+        double rb = findById(match.getPlayerL().getId()).getElo();
 
         double ea = 1/(1+ Math.pow(10, ((rb-ra)/400)));
         probabilityMap.put("ea", ea);
@@ -96,6 +113,23 @@ public class PlayerJpaService implements PlayerService {
         probabilityMap.put("eb", eb);
 
         return probabilityMap;
+    }
 
+    private ArchData insertArchData(Player player, int ratingUpdated, Match match) {
+        ArchData playerArch = new ArchData();
+        Set<Player> allPlayersSet = this.findAll();
+        List<Player> allPlayersList = allPlayersSet.stream().sorted(Comparator.comparing(Player::getPoints).reversed()).collect(Collectors.toList());
+
+        playerArch.setPlayer(player);
+        playerArch.setDate(match.getDate());
+        playerArch.setEloRating(ratingUpdated);
+        int totalGamesW = player.getLosesInTb() + player.getLosesInTwo() + player.getWinsInTb() + player.getWinsInTwo();
+        double winPercentageW = (((double)player.getWinsInTb() + (double)player.getWinsInTwo())/totalGamesW)*100;
+        playerArch.setWinPercentage((int)Math.round(winPercentageW));
+
+        int positionW = allPlayersList.indexOf(player) + 1;
+        playerArch.setPosition(positionW);
+
+        return playerArch;
     }
 }
