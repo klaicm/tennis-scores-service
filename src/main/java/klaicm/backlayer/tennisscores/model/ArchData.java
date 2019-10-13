@@ -17,6 +17,8 @@ public class ArchData extends BaseEntity {
     private Integer winPercentage;
     private Integer position;
     private LocalDate date;
+    private Integer totalWins;
+    private Integer totalLoses;
 
     public void setPlayer(Player player) {
         this.player = player;
@@ -52,5 +54,21 @@ public class ArchData extends BaseEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Integer getTotalWins() {
+        return totalWins;
+    }
+
+    public void setTotalWins(Integer totalWins) {
+        this.totalWins = totalWins;
+    }
+
+    public Integer getTotalLoses() {
+        return totalLoses;
+    }
+
+    public void setTotalLoses(Integer totalLoses) {
+        this.totalLoses = totalLoses;
     }
 }

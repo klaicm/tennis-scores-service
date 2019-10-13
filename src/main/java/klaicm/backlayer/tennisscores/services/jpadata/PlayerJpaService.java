@@ -75,7 +75,7 @@ public class PlayerJpaService implements PlayerService {
         int raUpdated = (int) Math.round(playerW.getElo() + K*(1 - probabilityMap.get("ea")));
         int rbUpdated = (int) Math.round(playerL.getElo() + K*(0 - probabilityMap.get("eb")));
 
-        if (match.getResult().length() <= 7) {
+        if (match.getResult().length() == 7) {
             playerW.setWinsInTwo(playerW.getWinsInTwo() + 1);
             playerW.setPoints(playerW.getPoints() + 3);
             playerL.setLosesInTwo(playerL.getLosesInTwo() + 1);
@@ -94,8 +94,8 @@ public class PlayerJpaService implements PlayerService {
         this.save(playerW);
         this.save(playerL);
 
-        ArchData playerWArch = insertArchData(playerW, raUpdated, match);
-        ArchData playerLArch = insertArchData(playerL, rbUpdated, match);
+        ArchData playerWArch = insertArchData(playerW, raUpdated, match, true);
+        ArchData playerLArch = insertArchData(playerL, rbUpdated, match, false);
 
         archDataJpaService.save(playerWArch);
         archDataJpaService.save(playerLArch);
@@ -115,7 +115,7 @@ public class PlayerJpaService implements PlayerService {
         return probabilityMap;
     }
 
-    private ArchData insertArchData(Player player, int ratingUpdated, Match match) {
+    private ArchData insertArchData(Player player, int ratingUpdated, Match match, boolean isWinner) {
         ArchData playerArch = new ArchData();
         Set<Player> allPlayersSet = this.findAll();
         List<Player> allPlayersList = allPlayersSet.stream().sorted(Comparator.comparing(Player::getPoints).reversed()).collect(Collectors.toList());
@@ -123,12 +123,24 @@ public class PlayerJpaService implements PlayerService {
         playerArch.setPlayer(player);
         playerArch.setDate(match.getDate());
         playerArch.setEloRating(ratingUpdated);
-        int totalGamesW = player.getLosesInTb() + player.getLosesInTwo() + player.getWinsInTb() + player.getWinsInTwo();
-        double winPercentageW = (((double)player.getWinsInTb() + (double)player.getWinsInTwo())/totalGamesW)*100;
+        int totalGames = player.getLosesInTb() + player.getLosesInTwo() + player.getWinsInTb() + player.getWinsInTwo();
+        double winPercentageW = (((double)player.getWinsInTb() + (double)player.getWinsInTwo())/totalGames)*100;
         playerArch.setWinPercentage((int)Math.round(winPercentageW));
 
-        int positionW = allPlayersList.indexOf(player) + 1;
-        playerArch.setPosition(positionW);
+        int position = allPlayersList.indexOf(player) + 1;
+        playerArch.setPosition(position);
+
+        if (isWinner) {
+            playerArch.setTotalWins((allPlayersList.get(allPlayersList.indexOf(player)).getWinsInTb() +
+                    allPlayersList.get(allPlayersList.indexOf(player)).getWinsInTwo()) + 1);
+            playerArch.setTotalLoses((allPlayersList.get(allPlayersList.indexOf(player)).getLosesInTb() +
+                    allPlayersList.get(allPlayersList.indexOf(player)).getLosesInTwo()));
+        } else {
+            playerArch.setTotalLoses((allPlayersList.get(allPlayersList.indexOf(player)).getLosesInTb() +
+                    allPlayersList.get(allPlayersList.indexOf(player)).getLosesInTwo()) + 1);
+            playerArch.setTotalWins((allPlayersList.get(allPlayersList.indexOf(player)).getWinsInTb() +
+                    allPlayersList.get(allPlayersList.indexOf(player)).getWinsInTwo()));
+        }
 
         return playerArch;
     }
