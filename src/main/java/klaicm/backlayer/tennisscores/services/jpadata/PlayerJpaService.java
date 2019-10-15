@@ -68,7 +68,7 @@ public class PlayerJpaService implements PlayerService {
         Player playerW = findById(match.getPlayerW().getId());
         Player playerL = findById(match.getPlayerL().getId());
 
-        Map<String, Double> probabilityMap = this.calculateProbabilityOfWin(match);
+        Map<String, Double> probabilityMap = this.calculateProbabilityOfWin(playerW.getElo(), playerL.getElo());
 
         // double raUpdated = ra + K*(1 - ea);
         // double rbUpdated = rb + K*(0 - eb);
@@ -101,11 +101,11 @@ public class PlayerJpaService implements PlayerService {
         archDataJpaService.save(playerLArch);
     }
 
-    public Map<String, Double> calculateProbabilityOfWin(Match match) {
+    public Map<String, Double> calculateProbabilityOfWin(Integer playerAElo, Integer playerBElo) {
         Map<String, Double> probabilityMap = new HashMap<String, Double>();
 
-        double ra = findById(match.getPlayerW().getId()).getElo();
-        double rb = findById(match.getPlayerL().getId()).getElo();
+        double ra = playerAElo;
+        double rb = playerBElo;
 
         double ea = 1/(1+ Math.pow(10, ((rb-ra)/400)));
         probabilityMap.put("ea", ea);

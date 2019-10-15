@@ -36,20 +36,22 @@ public class PlayerController {
 
     @GetMapping("/player/{id}")
     public Player getPlayer(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("player", playerJpaService.findById(id));
         return playerJpaService.findById(id);
     }
 
     @GetMapping("/player/matches/{id}")
     public Set<Match> getMatchesOfPlayer(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("playerMatches", matchJpaService.getPlayerMatches(id));
         return matchJpaService.getPlayerMatches(id);
     }
 
     @GetMapping("/player/arch/{id}")
     public Set<ArchData> getPlayerArchData(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("archData", archDataJpaService.findById(id));
         return archDataJpaService.getArchDataByPlayerId(id);
+    }
+
+    @GetMapping("/elo-stats")
+    public Map<String, Double> getWinProbability(@RequestParam String playerAElo, @RequestParam String playerBElo) {
+        return playerJpaService.calculateProbabilityOfWin(Integer.parseInt(playerAElo), Integer.parseInt(playerBElo));
     }
 
 }
